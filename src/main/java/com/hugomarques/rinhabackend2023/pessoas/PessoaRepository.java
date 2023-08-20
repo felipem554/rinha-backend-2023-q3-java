@@ -1,20 +1,12 @@
 package com.hugomarques.rinhabackend2023.pessoas;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
 
-import java.util.List;
-import java.util.UUID;
 
-public interface PessoaRepository extends JpaRepository<Pessoa, UUID> {
+public interface PessoaRepository extends ReactiveCrudRepository<Pessoa, String> {
 
-    @Query(nativeQuery = true,
-            value = "select p.* from pessoas p " +
-                    "where p.apelido like %:term% or " +
-                    "p.nome like %:term% or " +
-                    "p.nascimento like %:term% or " +
-                    "p.stack like %:term%")
-    List<Pessoa> findAllByTerm(@Param("term") String term);
+    Flux<Pessoa> findAllBy(TextCriteria criteria);
 
 }

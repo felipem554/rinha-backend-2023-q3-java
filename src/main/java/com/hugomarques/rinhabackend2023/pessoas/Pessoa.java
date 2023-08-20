@@ -1,25 +1,28 @@
 package com.hugomarques.rinhabackend2023.pessoas;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
-@Entity
-@Table(name = "pessoas")
+@Document(collection = "pessoas")
 public class Pessoa implements Serializable {
     @Id
-    private UUID id;
-    @Column(nullable = false, unique = true, length = 32)
+    private String id;
+
+    @TextIndexed
     private String apelido;
-    @Column(nullable = false, length = 100)
+
+    @TextIndexed
     private String nome;
-    @Column(nullable = false)
+
+    @TextIndexed
     private String nascimento;
-    @Column(nullable = true)
-    @Convert(converter = StringListConverter.class)
+
+    @TextIndexed
     private List<String> stack;
 
     public Pessoa() {
@@ -32,11 +35,11 @@ public class Pessoa implements Serializable {
         this.stack = stack;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,0 +1,31 @@
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+server:
+  compression:
+    enabled: true
+    min-response-size: 1024
+  port: ${SERVER_PORT:9999}
+
+spring:
+  application:
+    name: rinha-backend-2023
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+    mongodb:
+      auto-index-creation: true
+      uri: mongodb://127.0.0.1:27017/rinhadb?socketTimeoutMS=360000&connectTimeoutMS=360000&maxPoolSize=500&minPoolSize=50
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    async:
+      request-timeout: 360000
