@@ -1,7 +1,7 @@
-package com.hugomarques.rinhabackend2023.pessoas;
+package com.hugomarques.rinhabackend2023.exception;
 
  public class PessoaNotFoundException extends RuntimeException {
-        PessoaNotFoundException(String id) {
+        public PessoaNotFoundException(String id) {
             super("Pessoa com id: " + id + " não encontrada.");
         }
     }

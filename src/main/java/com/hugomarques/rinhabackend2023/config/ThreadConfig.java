@@ -1,4 +1,4 @@
-package com.hugomarques.rinhabackend2023;
+package com.hugomarques.rinhabackend2023.config;
 
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.context.annotation.Bean;

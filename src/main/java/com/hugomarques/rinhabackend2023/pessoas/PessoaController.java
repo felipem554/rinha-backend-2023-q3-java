@@ -3,6 +3,7 @@ package com.hugomarques.rinhabackend2023.pessoas;
 import java.util.List;
 import java.util.UUID;
 
+import com.hugomarques.rinhabackend2023.exception.PessoaNotFoundException;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,9 +42,9 @@ public class PessoaController {
             if (cache.opsForValue().get(pessoa.getApelido()) != null) {
                 return ResponseEntity.unprocessableEntity().build();
             }
-            pessoa.setId(UUID.randomUUID().toString());
+            pessoa.setId(UUID.randomUUID());
             cache.opsForValue().set(pessoa.getApelido(), pessoa);
-            cache.opsForValue().set(pessoa.getId(), pessoa);
+            cache.opsForValue().set(pessoa.getId().toString(), pessoa);
             repository.save(pessoa).subscribe();
             System.out.printf("Gravado pessoa:  %s - %s \n",pessoa.getId(),pessoa.getNome() );
             return new ResponseEntity<>(pessoa, HttpStatus.CREATED);
@@ -55,7 +56,7 @@ public class PessoaController {
      * 404 for not found.
      */
     @GetMapping("/pessoas/{id}")
-    public Mono<ResponseEntity<Pessoa>>getById(@PathVariable String id) {
+    public Mono<ResponseEntity<Pessoa>>getById(@PathVariable UUID id) {
         Pessoa cached = cache.opsForValue().get(id);
         if (cached != null) {
             System.out.printf("Tem no cache - pessoa:  %s - %s \n",cached.getId(),cached.getNome() );
@@ -63,7 +64,7 @@ public class PessoaController {
         }
         return repository.findById(id)
                 .map(ResponseEntity::ok)
-                .switchIfEmpty(Mono.error(new PessoaNotFoundException(id)));
+                .switchIfEmpty(Mono.error(new PessoaNotFoundException(id.toString())));
     }
 
     @GetMapping("/pessoas")

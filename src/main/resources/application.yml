@@ -1,3 +1,9 @@
+logging:
+  level:
+    root: WARN
+# localmente use o DEBUG:     
+# root: DEBUG
+
 management:
   endpoint:
     health:
@@ -23,7 +29,7 @@ spring:
       port: 6379
     mongodb:
       auto-index-creation: true
-      uri: mongodb://127.0.0.1:27017/rinhadb?socketTimeoutMS=360000&connectTimeoutMS=360000&maxPoolSize=500&minPoolSize=50
+      uri: ${MONGO_URI:mongodb://127.0.0.1:27017/rinhadb?socketTimeoutMS=360000&connectTimeoutMS=360000&maxPoolSize=500&minPoolSize=50}
   main:
     allow-bean-definition-overriding: true
   mvc:

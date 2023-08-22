@@ -1,5 +1,6 @@
 version: '3.9'
-
+#  1.5 CPUs
+#  3.0GB
 services:
   db-mongodb:
     image: mongo:latest
@@ -8,15 +9,15 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: '1.5GB'
+          cpus: '0.8'
+          memory: '1GB'
     networks:
       - app-network
 
   cache:
     hostname: cache
     image: redis:latest
-    command: ["redis-server", "--appendonly", "no", "--save ''"]
+    command: redis-server --save "" --appendonly no
     ports:
       - '6379:6379'
     deploy:

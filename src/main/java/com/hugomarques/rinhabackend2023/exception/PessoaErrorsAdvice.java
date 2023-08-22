@@ -1,4 +1,4 @@
-package com.hugomarques.rinhabackend2023.pessoas;
+package com.hugomarques.rinhabackend2023.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
