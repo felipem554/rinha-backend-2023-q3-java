@@ -1,7 +1,7 @@
 logging:
   level:
     root: WARN
-# localmente use o DEBUG:     
+# localmente use o DEBUG:
 # root: DEBUG
 
 management:
@@ -21,6 +21,8 @@ server:
 spring:
   application:
     name: rinha-backend-2023
+  banner:
+    location: rinha2023.txt
   cache:
     type: redis
   data:

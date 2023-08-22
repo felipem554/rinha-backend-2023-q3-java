@@ -1,18 +1,19 @@
 version: '3.9'
 name: 'rinha-de-backend'
 
+#  1.5 CPUs = 0.9 MongoDB + 2 x 0.25 Spring  Boot + 0.05 Redis + 0.05 NGinx
+#    3.0 GB = 0.7 MongoDB + 2 x 1.10 Spring Boot +  0.05 Redis + 0.05 NGinx
+
 services:
   spring-api1:
-    build: .
+    image: boaglio/rinhabackend2023:latest
     hostname: spring-api1
     environment:
       - SERVER_PORT=8080
-      - DATABASE_URL=jdbc:postgresql://db-postgresql:5432/rinhadb
-      - DATABASE_USERNAME=rinha
-      - DATABASE_PASSWORD=rinha123
+      - MONGO_URI=mongodb://db-mongodb:27017/rinhadb?socketTimeoutMS=360000&connectTimeoutMS=360000&maxPoolSize=50&minPoolSize=50
       - REDIS_HOST=cache
     depends_on:
-      - db-postgresql
+      - db-mongodb
       - cache
     ulimits:
       nofile:
@@ -21,22 +22,20 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.8'
-          memory: '1.25GB'
+          cpus: '0.25'
+          memory: '1.1GB'
     networks:
       - app-network
 
   spring-api2:
-    build: .
+    image: boaglio/rinhabackend2023:latest
     hostname: spring-api2
     environment:
       - SERVER_PORT=8080
-      - DATABASE_URL=jdbc:postgresql://db-postgresql:5432/rinhadb
-      - DATABASE_USERNAME=rinha
-      - DATABASE_PASSWORD=rinha123
+      - MONGO_URI=mongodb://db-mongodb:27017/rinhadb?socketTimeoutMS=360000&connectTimeoutMS=360000&maxPoolSize=50&minPoolSize=50
       - REDIS_HOST=cache
     depends_on:
-      - db-postgresql
+      - db-mongodb
       - cache
     ulimits:
       nofile:
@@ -45,8 +44,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.8'
-          memory: '1.25GB'
+          cpus: '0.25'
+          memory: '1.1GB'
     networks:
         - app-network
 
@@ -64,8 +63,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.2'
-          memory: '0.25GB'
+          cpus: '0.05'
+          memory: '0.1GB'
 
   cache:
     hostname: cache
@@ -77,25 +76,19 @@ services:
       resources:
         limits:
           cpus: '0.05'
-          memory: '0.25GB'
+          memory: '0.1GB'
     networks:
       - app-network
 
-  db-postgresql:
-    image: postgres:latest
-    command: postgres -c 'max_connections=600'
-    hostname: db
-    environment:
-      - POSTGRES_PASSWORD=rinha123
-      - POSTGRES_USER=rinha
-      - POSTGRES_DB=rinhadb
+  db-mongodb:
+    image: mongo:latest
     ports:
-      - "5432:5432"
+      - "27017:27017"
     deploy:
       resources:
         limits:
-          cpus: '0.05'
-          memory: '0.5GB'
+          cpus: '0.9'
+          memory: '0.7GB'
     networks:
       - app-network
 

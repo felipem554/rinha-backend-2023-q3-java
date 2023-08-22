@@ -30,7 +30,7 @@ Na raiz do projeto, rodar:
 
 2. Subir a aplicação do Spring Boot (pela IDE ou por terminal)
 
-``  mvn spring-boot:run ``
+``  MAVEN_OPTS="-Xmx1500m --enable-preview"  mvn spring-boot:run ``
 
 3. Rode os testes do Galting
 

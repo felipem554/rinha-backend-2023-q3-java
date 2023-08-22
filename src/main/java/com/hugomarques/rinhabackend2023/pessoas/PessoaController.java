@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.hugomarques.rinhabackend2023.exception.PessoaNotFoundException;
+import org.apache.juli.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,6 +25,8 @@ import reactor.core.publisher.Mono;
 @CacheConfig(cacheNames = "PessoasCache")
 public class PessoaController {
 
+    private Logger log = LoggerFactory.getLogger(PessoaController.class);
+
     private final  RedisTemplate<String, Pessoa> cache;
 
     private final PessoaRepository repository;
@@ -30,7 +35,6 @@ public class PessoaController {
         this.cache = cache;
         this.repository = repository;
     }
-
 
     /**
      * Returns 201 for success and 401 if there's already a person with that same nickname.
@@ -46,7 +50,7 @@ public class PessoaController {
             cache.opsForValue().set(pessoa.getApelido(), pessoa);
             cache.opsForValue().set(pessoa.getId().toString(), pessoa);
             repository.save(pessoa).subscribe();
-            System.out.printf("Gravado pessoa:  %s - %s \n",pessoa.getId(),pessoa.getNome() );
+            log.info("Gravado pessoa:  {}  - {}",pessoa.getId(),pessoa.getNome() );
             return new ResponseEntity<>(pessoa, HttpStatus.CREATED);
         });
     }
@@ -59,7 +63,7 @@ public class PessoaController {
     public Mono<ResponseEntity<Pessoa>>getById(@PathVariable UUID id) {
         Pessoa cached = cache.opsForValue().get(id);
         if (cached != null) {
-            System.out.printf("Tem no cache - pessoa:  %s - %s \n",cached.getId(),cached.getNome() );
+            log.info("Tem no cache - pessoa: {}} - {}}",cached.getId(),cached.getNome() );
             return  Mono.just(ResponseEntity.ok(cached));
         }
         return repository.findById(id)
@@ -72,7 +76,7 @@ public class PessoaController {
         if (term == null || term.isEmpty() || term.isBlank()) {
             return Mono.just(ResponseEntity.badRequest().build());
         }
-        System.out.printf("Busca por:  %s \n",term);
+        log.info("Busca por:  {}}",term);
 
         TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(term);
         Flux<Pessoa> pessoasFlux = repository.findAllBy(criteria);

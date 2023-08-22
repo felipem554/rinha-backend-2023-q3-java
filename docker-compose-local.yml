@@ -1,6 +1,5 @@
 version: '3.9'
-#  1.5 CPUs
-#  3.0GB
+
 services:
   db-mongodb:
     image: mongo:latest
