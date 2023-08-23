@@ -1,10 +1,10 @@
 package com.hugomarques.rinhabackend2023.pessoas;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
 import com.hugomarques.rinhabackend2023.exception.PessoaNotFoundException;
-import org.apache.juli.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;
@@ -37,24 +37,39 @@ public class PessoaController {
     }
 
     /**
-     * Returns 201 for success and 401 if there's already a person with that same nickname.
+     * Returns 201 for success and 422 if there's already a person with that same nickname.
      * 400 for invalid requests.
      */
-    @PostMapping("/pessoas")
-    public Mono<ResponseEntity<Pessoa>> newPessoa(@RequestBody Pessoa pessoa) {
-        return Mono.fromCallable(() -> {
-            if (cache.opsForValue().get(pessoa.getApelido()) != null) {
-                return ResponseEntity.unprocessableEntity().build();
+     @PostMapping("/pessoas")
+    public Mono<ResponseEntity<?>> newPessoa(@RequestBody Pessoa pessoa) {
+        String apelido = pessoa.getApelido();
+
+        return Mono.defer(() -> {
+            // Verifica se a pessoa existe no cache
+            if (cache.opsForValue().get(apelido) != null) {
+                log.info("Pessoa com apelido {} já existe no cache.", apelido);
+                return Mono.just(ResponseEntity.unprocessableEntity().build());
             }
-            pessoa.setId(UUID.randomUUID());
-            cache.opsForValue().set(pessoa.getApelido(), pessoa);
-            cache.opsForValue().set(pessoa.getId().toString(), pessoa);
-            repository.save(pessoa).subscribe();
-            log.info("Gravado pessoa:  {}  - {}",pessoa.getId(),pessoa.getNome() );
-            return new ResponseEntity<>(pessoa, HttpStatus.CREATED);
+
+            // Verifica se a pessoa existe no banco de dados
+            return repository.findByApelido(apelido)
+                    .flatMap(existingPessoa -> {
+                        log.info("Pessoa com apelido {} já existe no banco de dados.", existingPessoa.getApelido());
+                        return Mono.just(ResponseEntity.unprocessableEntity().build());
+                    })
+                    .switchIfEmpty(Mono.defer(() -> {
+                        // Caso não exista no banco de dados, grava no cache e no banco de dados
+                        pessoa.setId(UUID.randomUUID());
+                        return repository.save(pessoa)
+                                .flatMap(savedPessoa -> {
+                                    cache.opsForValue().set(apelido, savedPessoa);
+                                    cache.opsForValue().set(pessoa.getId().toString(), savedPessoa);
+                                    log.info("Pessoa com apelido {} adicionada no cache e no banco de dados.", savedPessoa.getApelido());
+                                    return Mono.just(ResponseEntity.created(URI.create("/pessoas/"+savedPessoa.getId().toString()) ).build());
+                                });
+                    }));
         });
     }
-
     /**
      * 200 for OK
      * 404 for not found.

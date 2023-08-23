@@ -1,8 +1,8 @@
 logging:
   level:
-    root: WARN
-# localmente use o DEBUG:
-# root: DEBUG
+   root: WARN
+# localmente use o INFO
+#  root: INFO
 
 management:
   endpoint:
@@ -17,6 +17,9 @@ server:
     enabled: true
     min-response-size: 1024
   port: ${SERVER_PORT:9999}
+  tomcat:
+    connection-timeout : 120000 # Tempo limite de conexão (em milissegundos)
+    max-connections: 1000  # Número máximo de conexões simultâneas
 
 spring:
   application:

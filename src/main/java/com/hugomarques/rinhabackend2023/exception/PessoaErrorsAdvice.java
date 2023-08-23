@@ -20,8 +20,8 @@ public class PessoaErrorsAdvice {
     @ResponseBody
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    String apelidoDuplicadoHandler(DataIntegrityViolationException ex) {
-        return "Apelido já em uso";
+    void apelidoDuplicadoHandler( ) {
+
     }
 
 }
