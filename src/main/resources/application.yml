@@ -1,8 +1,8 @@
 logging:
   level:
-   root: WARN
+#   root: WARN
 # localmente use o INFO
-#  root: INFO
+   root: INFO
 
 management:
   endpoint:

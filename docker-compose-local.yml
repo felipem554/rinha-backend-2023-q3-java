@@ -13,19 +13,5 @@ services:
     networks:
       - app-network
 
-  cache:
-    hostname: cache
-    image: redis:latest
-    command: redis-server --save "" --appendonly no
-    ports:
-      - '6379:6379'
-    deploy:
-      resources:
-        limits:
-          cpus: '0.05'
-          memory: '0.05GB'
-    networks:
-      - app-network
-
 networks:
   app-network:

@@ -1,12 +1,13 @@
 version: '3.9'
 name: 'rinha-de-backend'
 
-#  1.5 CPUs = 0.7 MongoDB + 2 x 0.35 Spring Boot + 0.05 Redis + 0.05 NGinx
-#    3.0 GB = 0.65 MongoDB + 2 x 1.10 Spring Boot + 0.05 Redis + 0.10 NGinx
+#  1.5 CPUs = 0.7 MongoDB + 2 x 0.35 Spring Boot + 0.05 NGinx
+#    3.0 GB = 0.65 MongoDB + 2 x 1.10 Spring Boot +  0.10 NGinx
 
 services:
   spring-api1:
-    image: boaglio/rinhabackend2023:latest
+#    image: boaglio/rinhabackend2023:latest
+    image: docker.io/library/rinhabackend2023:0.0.1-SNAPSHOT
     hostname: spring-api1
     environment:
       - SERVER_PORT=8080
@@ -14,7 +15,6 @@ services:
       - REDIS_HOST=cache
     depends_on:
       - db-mongodb
-      - cache
     ulimits:
       nofile:
         soft: 1000000
@@ -22,13 +22,14 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.35'
+          cpus: '0.4'
           memory: '1.1GB'
     networks:
       - app-network
 
   spring-api2:
-    image: boaglio/rinhabackend2023:latest
+    #    image: boaglio/rinhabackend2023:latest
+    image: docker.io/library/rinhabackend2023:0.0.1-SNAPSHOT
     hostname: spring-api2
     environment:
       - SERVER_PORT=8080
@@ -36,7 +37,6 @@ services:
       - REDIS_HOST=cache
     depends_on:
       - db-mongodb
-      - cache
     ulimits:
       nofile:
         soft: 1000000
@@ -44,7 +44,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.35'
+          cpus: '0.4'
           memory: '1.1GB'
     networks:
         - app-network
@@ -66,20 +66,6 @@ services:
           cpus: '0.05'
           memory: '0.1GB'
 
-  cache:
-    hostname: cache
-    image: redis:latest
-    command: ["redis-server", "--appendonly", "no", "--save ''"]
-    ports:
-      - '6379:6379'
-    deploy:
-      resources:
-        limits:
-          cpus: '0.05'
-          memory: '0.05GB'
-    networks:
-      - app-network
-
   db-mongodb:
     image: mongo:latest
     ports:
@@ -87,7 +73,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.7'
+          cpus: '0.65'
           memory: '0.65GB'
     networks:
       - app-network
