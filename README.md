@@ -6,11 +6,20 @@ Projeto fork de   [https://github.com/hugomarques/rinha-backend-2023-q3-java](ht
 
 ## Implementação
 
+
+## Versão 1
+
 A adaptação feita foi:
 
 - trocar o PostgreSQL por MongoDB Reactive
 - trocar o Spring MVC pelo  Spring WebFlux
 - utilizar o Full Text Search do MongoDB na classe domain (@TextIndexed  cria o índice automaticamente)
+
+## Versão 2
+
+- removido Virtual Threads
+- removido Redis (ou qqer cache)
+- usado Spring Native (com GraalVM)
 
 ## Requisitos
 
