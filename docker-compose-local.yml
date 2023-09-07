@@ -1,17 +1,39 @@
 version: '3.9'
 
 services:
+  spring-api1:
+    build: .
+    hostname: spring-api1
+    environment:
+      - SERVER_PORT=9999
+      - MONGO_URI=mongodb://db-mongodb:27017/rinhadb?socketTimeoutMS=360000&connectTimeoutMS=360000&maxPoolSize=50&minPoolSize=50
+    depends_on:
+      - db-mongodb
+    ulimits:
+      nofile:
+        soft: 1000000
+        hard: 1000000
+    ports:
+      - "9999:9999"
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+          memory: '1GB'
+
   db-mongodb:
     image: mongo:latest
     ports:
       - "27017:27017"
+    networks:
+      - app-network
     deploy:
       resources:
         limits:
-          cpus: '0.7'
-          memory: '0.7GB'
-    networks:
-      - app-network
+          cpus: '0.45'
+          memory: '0.9GB'
 
 networks:
   app-network:

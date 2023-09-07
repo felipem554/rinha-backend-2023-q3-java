@@ -21,6 +21,17 @@ A adaptação feita foi:
 - removido Redis (ou qqer cache)
 - usado Spring Native (com GraalVM)
 
+## Versão 3  (CHEGOU EM 40K)! 
+
+- adicionando campo allFieldsInOne apenas para o índice FTS
+- usando  writeConcern: UNACKNOWLEDGED no MongoDB (não espera OK de registro inserido)
+- usando cache local (HashMap/HashSet)
+- removido Spring Validation
+- adicionado advice para erros do log
+- ajustes no nginx
+- ajustes nos pesos de CPU 
+ 
+
 ## Requisitos
 
 Para rodar, precisamos ter instalado:

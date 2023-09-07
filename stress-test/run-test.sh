@@ -13,6 +13,6 @@ WORKSPACE=$HOME/workspaces/workspace-sts/rinha-backend-2023-q3-java/stress-test
 
 sh $GATLING_BIN_DIR/gatling.sh -rm local -rd "DESCRICAO" -rf $WORKSPACE/user-files/results -sf $WORKSPACE/user-files/simulations/rinhabackend  -rsf $WORKSPACE/user-files/resources
 
-sleep 3
+sleep 10
 
 curl -v "http://localhost:9999/contagem-pessoas"

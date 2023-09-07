@@ -1,42 +1,28 @@
 logging:
   level:
-#   root: WARN
+    root: WARN
 # localmente use o INFO
-   root: INFO
+#   root: INFO
 
-management:
-  endpoint:
-    health:
-      show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: '*'
 server:
   compression:
     enabled: true
     min-response-size: 1024
   port: ${SERVER_PORT:9999}
   tomcat:
-    connection-timeout : 120000 # Tempo limite de conexão (em milissegundos)
-    max-connections: 1000  # Número máximo de conexões simultâneas
+    connection-timeout : 120000
+    max-connections: 1000
 
 spring:
   application:
     name: rinha-backend-2023
   banner:
     location: rinha2023.txt
-  cache:
-    type: redis
   data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: 6379
     mongodb:
       auto-index-creation: true
-      uri: ${MONGO_URI:mongodb://127.0.0.1:27017/rinhadb?socketTimeoutMS=360000&connectTimeoutMS=360000&maxPoolSize=500&minPoolSize=50}
-  main:
-    allow-bean-definition-overriding: true
+      uri: ${MONGO_URI:mongodb://127.0.0.1:27017/rinhadb?socketTimeoutMS=600000&connectTimeoutMS=600000&maxPoolSize=50&minPoolSize=50}
+      writeConcern: UNACKNOWLEDGED
   mvc:
     async:
-      request-timeout: 360000
+      request-timeout: 600000
