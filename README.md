@@ -23,6 +23,7 @@ A adaptação feita foi:
 
 ## Versão 3  (CHEGOU EM 40K)! 
 
+- baseada em Java 20 (sem Virtual Threads)
 - adicionando campo allFieldsInOne apenas para o índice FTS
 - usando  writeConcern: UNACKNOWLEDGED no MongoDB (não espera OK de registro inserido)
 - usando cache local (HashMap/HashSet)
@@ -50,7 +51,7 @@ Na raiz do projeto, rodar:
 
 2. Subir a aplicação do Spring Boot (pela IDE ou por terminal)
 
-``  MAVEN_OPTS="-Xmx1500m --enable-preview"  mvn spring-boot:run ``
+``  mvn spring-boot:run ``
 
 3. Rode os testes do Galting
 
