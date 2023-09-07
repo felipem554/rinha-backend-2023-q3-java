@@ -49,7 +49,6 @@ public class Pessoa implements Serializable {
         StringBuilder builder = new StringBuilder();
         builder.append(apelido);
         builder.append(nome);
-        builder.append(apelido);
         builder.append(nascimento);
         if (Objects.nonNull(stack))
             for (String str : stack) {
