@@ -64,4 +64,4 @@ Tudo isso dá para ser feito dentro do IntelliJ tb se preferir.
 
 A cada teste remova os volumes criados pelo Docker. 
 
-# teste 1
+# teste 3
