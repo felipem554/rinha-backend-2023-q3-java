@@ -6,10 +6,10 @@
 
 
 # coloque o diretório do Gatling
-GATLING_BIN_DIR=/home/fb/Downloads/gatling-3.9.5/bin
+GATLING_BIN_DIR=$HOME/opt/gatling/3.9.5/bin
 
 # diretório do projeto
-WORKSPACE=$HOME/workspaces/workspace-sts/rinha-backend-2023-q3-java/stress-test
+WORKSPACE=$HOME/proj/rinha-backend-2023-q3-java/stress-test
 
 sh $GATLING_BIN_DIR/gatling.sh -rm local -rd "DESCRICAO" -rf $WORKSPACE/user-files/results -sf $WORKSPACE/user-files/simulations/rinhabackend  -rsf $WORKSPACE/user-files/resources
 

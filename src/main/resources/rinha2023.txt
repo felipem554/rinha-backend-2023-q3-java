@@ -12,5 +12,5 @@
       `\=
 
 Rinha Back-End 2023 Q3
-Javinha  + Springao + MongoDB
+Javinha  + Spring + MongoDB
 @devmultitask  =)

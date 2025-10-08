@@ -21,7 +21,7 @@ A adaptação feita foi:
 - removido Redis (ou qqer cache)
 - usado Spring Native (com GraalVM)
 
-## Versão 3  (CHEGOU EM 40K)! 
+## Versão 3 - 20000 usuarios cadastrados!
 
 - baseada em Java 20 (sem Virtual Threads)
 - adicionando campo allFieldsInOne apenas para o índice FTS
@@ -49,19 +49,17 @@ Na raiz do projeto, rodar:
 
 ``  docker compose -f docker-compose-local.yml up  ``
 
-2. Subir a aplicação do Spring Boot (pela IDE ou por terminal)
-
-``  mvn spring-boot:run ``
-
-3. Rode os testes do Galting
+2. Rode os testes do Galting
 
 ``  
 cd stress-test
 ./run-tests.sh
-   ``
+``
 
 Tudo isso dá para ser feito dentro do IntelliJ tb se preferir.
 
 A cada teste remova os volumes criados pelo Docker. 
 
-# teste 3
+``
+docker compose -f docker-compose-local.yml rm -svf
+``
