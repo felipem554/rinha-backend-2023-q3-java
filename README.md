@@ -1,65 +1,64 @@
 # rinha-backend-2023-q3-java
 
-Backend pra rinha backend 2023 q3
+Backend for *Challenge Backend 2023 Q3*
 
-Projeto fork de   [https://github.com/hugomarques/rinha-backend-2023-q3-java](https://github.com/hugomarques/rinha-backend-2023-q3-java)
+Project forked from [https://github.com/hugomarques/rinha-backend-2023-q3-java](https://github.com/hugomarques/rinha-backend-2023-q3-java)
 
-## Implementação
+## Implementation
 
+### Version 1
 
-## Versão 1
+The following adaptations were made:
 
-A adaptação feita foi:
+- Replaced PostgreSQL with **Reactive MongoDB**
+- Replaced **Spring MVC** with **Spring WebFlux**
+- Used **MongoDB Full Text Search** in the domain class (`@TextIndexed` automatically creates the index)
 
-- trocar o PostgreSQL por MongoDB Reactive
-- trocar o Spring MVC pelo  Spring WebFlux
-- utilizar o Full Text Search do MongoDB na classe domain (@TextIndexed  cria o índice automaticamente)
+### Version 2
 
-## Versão 2
+- Removed **Virtual Threads**
+- Removed **Redis** (or any cache)
+- Used **Spring Native** (with **GraalVM**)
 
-- removido Virtual Threads
-- removido Redis (ou qqer cache)
-- usado Spring Native (com GraalVM)
+### Version 3
 
-## Versão 3 - 20000 usuarios cadastrados!
+- Based on **Java 20** (without Virtual Threads)
+- Added a field `allFieldsInOne` only for the **FTS (Full Text Search)** index
+- Using `writeConcern: UNACKNOWLEDGED` in MongoDB (does not wait for acknowledgment of inserted records)
+- Using **local cache** (`HashMap`/`HashSet`)
+- Removed **Spring Validation**
+- Added **advice for log errors**
+- Adjustments in **nginx**
+- Adjustments in **CPU weights**
 
-- baseada em Java 20 (sem Virtual Threads)
-- adicionando campo allFieldsInOne apenas para o índice FTS
-- usando  writeConcern: UNACKNOWLEDGED no MongoDB (não espera OK de registro inserido)
-- usando cache local (HashMap/HashSet)
-- removido Spring Validation
-- adicionado advice para erros do log
-- ajustes no nginx
-- ajustes nos pesos de CPU 
- 
+## Requirements
 
-## Requisitos
+To run the project, you need to have installed:
 
-Para rodar, precisamos ter instalado:
+* **Docker**
+* **Gatling** (version used: [3.9.5](https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/3.9.5/))
 
-* docker
-* Gatling (versão usada [3.9.5](https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/3.9.5/)
+## How to Run
 
+1. Start the environment (**MongoDB + Redis**) with Docker:
 
-## Para rodar
+   In the root folder of the project, run:
 
-1. Subir o ambiente (MongoDB + Redis) com o docker :
+   ```
+   docker compose -f docker-compose-local.yml up
+   ```
 
-Na raiz do projeto, rodar: 
+2. Run the **Gatling** tests:
 
-``  docker compose -f docker-compose-local.yml up  ``
+   ```
+   cd stress-test
+   ./run-tests.sh
+   ```
 
-2. Rode os testes do Galting
+All of this can also be done inside **IntelliJ**, if you prefer.
 
-``  
-cd stress-test
-./run-tests.sh
-``
+After each test, remove the Docker volumes created:
 
-Tudo isso dá para ser feito dentro do IntelliJ tb se preferir.
-
-A cada teste remova os volumes criados pelo Docker. 
-
-``
+```
 docker compose -f docker-compose-local.yml rm -svf
-``
+```
